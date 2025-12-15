@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.themes.MainTextStyle
-import com.example.playlistmaker.themes.PrimaryGray
-import com.example.playlistmaker.themes.SecondaryGray
+import com.example.playlistmaker.ui.themes.MainTextStyle
+import com.example.playlistmaker.ui.themes.PrimaryGray
+import com.example.playlistmaker.ui.themes.SecondaryGray
 import com.example.playlistmaker.ui.components.MenuButton
 import com.example.playlistmaker.ui.components.ScreenHeader
 

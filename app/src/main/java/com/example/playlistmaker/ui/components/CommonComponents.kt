@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.themes.HeaderStyle
+import com.example.playlistmaker.ui.themes.HeaderStyle
 
 
 @Composable

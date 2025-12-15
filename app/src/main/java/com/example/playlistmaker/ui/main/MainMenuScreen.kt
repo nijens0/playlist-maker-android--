@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.themes.AccentBlue
-import com.example.playlistmaker.themes.HeaderStyle
+import com.example.playlistmaker.ui.themes.AccentBlue
+import com.example.playlistmaker.ui.themes.HeaderStyle
 import com.example.playlistmaker.ui.components.MenuButton
 import com.example.playlistmaker.ui.navigation.Routes
 
