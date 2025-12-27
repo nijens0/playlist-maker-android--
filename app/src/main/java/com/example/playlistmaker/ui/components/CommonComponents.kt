@@ -10,9 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
+import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.themes.HeaderStyle
 
 
@@ -54,5 +57,33 @@ fun ScreenHeader(text: String, onBackClick: () -> Unit) {
             text = text,
             style = HeaderStyle
         )
+    }
+}
+
+@Composable
+fun TrackListItem(track: Track) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Image(
+            modifier = Modifier.size(45.dp),
+            painter = painterResource(id = R.drawable.ic_music),
+            contentDescription = "Трек ${track.trackName}"
+        )
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(track.trackName, fontWeight = FontWeight.Bold)
+            Text(text = track.artistName)
+        }
+        Column(
+            modifier = Modifier.weight(0.2f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(track.trackTime)
+        }
     }
 }
