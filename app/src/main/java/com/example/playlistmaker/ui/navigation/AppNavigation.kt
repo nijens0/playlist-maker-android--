@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -16,6 +17,7 @@ import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.main.MainMenuScreen
 import com.example.playlistmaker.ui.search.SearchScreen
 import com.example.playlistmaker.ui.settings.SettingsScreen
+import com.example.playlistmaker.ui.view_model.SearchViewModel
 
 @Composable
 fun AppNavigation() {
@@ -29,7 +31,10 @@ fun AppNavigation() {
             MainMenuScreen(navController)
         }
         composable(Routes.SEARCH) {
-            SearchScreen(navController)
+            val viewModel: SearchViewModel = viewModel(
+                factory = SearchViewModel.getViewModelFactory()
+            )
+            SearchScreen(navController, viewModel)
         }
         composable(Routes.SETTINGS) {
             SettingsScreen(navController)
