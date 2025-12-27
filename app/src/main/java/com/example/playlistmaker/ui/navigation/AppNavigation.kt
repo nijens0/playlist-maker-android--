@@ -40,10 +40,10 @@ fun AppNavigation() {
             SettingsScreen(navController)
         }
         composable(Routes.PLAYLISTS) {
-            PlaceholderScreen("Playlists", navController) { navController.popBackStack() }
+            PlaceholderScreen("Playlists") { navController.popBackStack() }
         }
         composable(Routes.FAVORITES) {
-            PlaceholderScreen("Favorites", navController) { navController.popBackStack() }
+            PlaceholderScreen("Favorites") { navController.popBackStack() }
         }
     }
 }
@@ -51,7 +51,6 @@ fun AppNavigation() {
 @Composable
 fun PlaceholderScreen(
     title: String,
-    navController: androidx.navigation.NavController,
     onBack: () -> Unit
 ) {
     Column(modifier = Modifier
