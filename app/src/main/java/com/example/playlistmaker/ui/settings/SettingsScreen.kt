@@ -61,9 +61,8 @@ fun SettingsScreen(navController: NavController) {
             }
             try {
                 context.startActivity(supportIntent)
-            } catch (e: Exception) {
-            }
-        }) { RowTextToSupport() }
+            } catch (_: Exception) {
+            } }) { RowTextToSupport() }
 
         MenuButton(onClick = {
             val agreementIntent =

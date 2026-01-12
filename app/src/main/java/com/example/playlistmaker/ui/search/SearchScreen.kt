@@ -78,7 +78,7 @@ fun SearchScreen(
                             .size(16.dp)
                             .clickable { textField = "" },
                         imageVector = Icons.Default.Clear,
-                        contentDescription = "Clear",
+                        contentDescription = stringResource(R.string.clearr),
                         tint = PrimaryGray
                     )
                 }
@@ -87,7 +87,7 @@ fun SearchScreen(
         when (screenState) {
             is SearchState.Initial -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Введите строку для поиска")
+                    Text(stringResource(R.string.inputString))
                 }
             }
             is SearchState.Searching -> {
@@ -109,7 +109,7 @@ fun SearchScreen(
             is SearchState.Fail -> {
                 val error = (screenState as SearchState.Fail).error
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Ошибка: $error", color = Color.Red)
+                    Text("${R.string.error}: $error", color = Color.Red)
                 }
             }
         }
