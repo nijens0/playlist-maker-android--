@@ -69,7 +69,7 @@ fun TrackListItem(track: Track) {
         Image(
             modifier = Modifier.size(45.dp),
             painter = painterResource(id = R.drawable.ic_music),
-            contentDescription = "Трек ${track.trackName}"
+            contentDescription = "${R.string.track}+${track.trackName}"
         )
         Column(
             modifier = Modifier.weight(1f),

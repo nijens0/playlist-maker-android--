@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,7 @@ import com.example.playlistmaker.ui.main.MainMenuScreen
 import com.example.playlistmaker.ui.search.SearchScreen
 import com.example.playlistmaker.ui.settings.SettingsScreen
 import com.example.playlistmaker.ui.view_model.SearchViewModel
+import com.example.playlistmaker.R
 
 @Composable
 fun AppNavigation() {
@@ -40,10 +42,12 @@ fun AppNavigation() {
             SettingsScreen(navController)
         }
         composable(Routes.PLAYLISTS) {
-            PlaceholderScreen("Playlists") { navController.popBackStack() }
+            val title = stringResource(id = R.string.playlists)
+            PlaceholderScreen(title) { navController.popBackStack() }
         }
         composable(Routes.FAVORITES) {
-            PlaceholderScreen("Favorites") { navController.popBackStack() }
+            val title = stringResource(id = R.string.favourite)
+            PlaceholderScreen(title) { navController.popBackStack() }
         }
     }
 }

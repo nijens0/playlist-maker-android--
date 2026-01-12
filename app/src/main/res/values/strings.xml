@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PlaylistMaker</string>
     <string name="PlaylistHeader">Playlist maker</string>
+    <string name="clearr">Очистить</string>
     <string name="search">Поиск</string>
     <string name="playlists">Плейлисты</string>
     <string name="favourite">Избранное</string>
@@ -14,4 +15,7 @@
     <string name="emailSubject">Сообщение разработчику приложения Playlist Maker</string>
     <string name="emailMessage">Спасибо разработчику за крутое приложение!</string>
     <string name="practicumOffer">https://yandex.ru/legal/practicum_offer/ru/</string>
+    <string name="track">Трэк</string>
+    <string name="inputString">Ввеидте строку для поиска</string>
+    <string name="error">Ошибка</string>
 </resources>
