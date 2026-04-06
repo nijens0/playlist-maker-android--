@@ -2,8 +2,14 @@ package com.example.playlistmaker.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.network.Track
@@ -39,19 +47,19 @@ fun ScreenHeader(text: String, onBackClick: () -> Unit) {
         modifier = Modifier.padding(top = 20.dp, bottom = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Button(
+        IconButton(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 28.dp)
+                .size(24.dp),
             onClick = onBackClick,
             enabled = true,
-            contentPadding = PaddingValues(0.dp),
-            colors = ButtonDefaults.buttonColors(Color.White),
-            content = {
-                Image(
-                    modifier = Modifier.padding(start = 20.dp, end = 28.dp),
-                    painter = painterResource(R.drawable.back_button),
-                    contentDescription = "Back"
-                )
-            }
-        )
+            colors = IconButtonDefaults.iconButtonColors(Color.White)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.back)
+            )
+        }
         Text(
             text = text,
             style = HeaderStyle
