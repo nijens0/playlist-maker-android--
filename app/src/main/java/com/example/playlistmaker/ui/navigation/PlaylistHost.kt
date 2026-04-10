@@ -36,7 +36,7 @@ fun AppNavigation() {
             val viewModel: SearchViewModel = viewModel(
                 factory = SearchViewModel.getViewModelFactory()
             )
-            SearchScreen(navController, viewModel)
+            SearchScreen(navController, viewModel) {navController.popBackStack()}
         }
         composable(Routes.SETTINGS) {
             SettingsScreen(navController)

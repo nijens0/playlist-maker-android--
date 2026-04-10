@@ -19,4 +19,8 @@
     <string name="inputString">Ввеидте строку для поиска</string>
     <string name="error">Ошибка</string>
     <string name="back">Назад</string>
+    <string name="no_songs_found">Треки не найдены</string>
+    <string name="songs">Треки</string>
+    <string name="search_icon">Иконка поиска</string>
+
 </resources>
