@@ -3,8 +3,9 @@ package com.example.playlistmaker.ui.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
-import com.example.playlistmaker.network.TracksRepositoryImpl
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.SearchHistoryRepository
+import com.example.playlistmaker.domain.TracksRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +19,12 @@ import java.io.IOException
 
 
 @OptIn(FlowPreview::class)
-class SearchViewModel : ViewModel() {
-    private val tracksRepository = TracksRepositoryImpl()
-    private val searchHistoryRepository = SearchHistoryRepositoryImpl(scope = viewModelScope)
+class SearchViewModel(
+    private val tracksRepository: TracksRepository,
+    private val searchHistoryRepository: SearchHistoryRepository
+) : ViewModel() {
+    // private val tracksRepository = TracksRepositoryImpl()
+    // private val searchHistoryRepository = SearchHistoryRepositoryImpl(scope = viewModelScope)
 
     private val _searchQuery = MutableStateFlow("")
     private val _searchScreenState = MutableStateFlow<SearchState>(SearchState.Initial)
@@ -63,12 +67,17 @@ class SearchViewModel : ViewModel() {
 
     fun getHistoryList(): Flow<List<String>> = searchHistoryRepository.getHistoryRequests()
 
+
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T: ViewModel> create(modelClass: Class<T>): T {
-                    return SearchViewModel() as T
+                    val tracksRepository = Creator.getTracksRepository()
+                    val searchHistoryRepository = Creator.getSearchHistoryRepository()
+                    return SearchViewModel(
+                        tracksRepository = tracksRepository,
+                        searchHistoryRepository = searchHistoryRepository) as T
                 }
             }
     }
