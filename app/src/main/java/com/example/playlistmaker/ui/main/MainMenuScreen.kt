@@ -35,7 +35,6 @@ fun MainMenuScreen(navController: NavController) {
                 stringResource(R.string.PlaylistHeader),
                 modifier = Modifier
                     .padding(start = 16.dp, top = 14.dp, bottom = 30.dp)
-                    .width(140.dp)
                     .height(26.dp),
                 style = TextStyle(
                     color = Color.White,

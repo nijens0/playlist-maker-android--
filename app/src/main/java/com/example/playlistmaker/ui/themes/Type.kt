@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
 
@@ -16,4 +17,10 @@ val MainTextStyle = TextStyle(
     color = Color.Black,
     fontSize = 16.sp,
     fontFamily = FontFamily(Font(R.font.ys_medium))
+)
+val CommonTextStyle = TextStyle(
+    color = Color.Black,
+    fontSize = 16.sp,
+    fontFamily = FontFamily(Font(R.font.ys_regular)),
+    fontWeight = FontWeight.Thin
 )

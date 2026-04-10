@@ -6,110 +6,211 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.components.HistoryRequests
+import com.example.playlistmaker.ui.components.ScreenHeader
+import com.example.playlistmaker.ui.components.TrackListItem
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
 import com.example.playlistmaker.ui.themes.SecondaryGray
-import com.example.playlistmaker.ui.components.ScreenHeader
-import com.example.playlistmaker.ui.components.TrackListItem
 import com.example.playlistmaker.ui.view_model.SearchState
 import com.example.playlistmaker.ui.view_model.SearchViewModel
 
 @Composable
 fun SearchScreen(
     navController: NavController,
-    viewModel: SearchViewModel
-    ) {
-    val screenState by viewModel.searchScreenState.collectAsState()
-    var textField by remember { mutableStateOf("") }
+    searchViewModel: SearchViewModel,
+    onClick: (Int?) -> Unit
+) {
+    val screenState by searchViewModel.searchScreenState.collectAsState()
+    val historyList by searchViewModel.getHistoryList().collectAsState(initial = emptyList())
+    var text by remember { mutableStateOf("") }
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(text) {
+        searchViewModel.updateQuery(text)
+    }
+
+    LaunchedEffect(screenState) {
+        when (screenState) {
+            is SearchState.Success -> {
+                focusManager.clearFocus()
+            }
+
+            else -> Unit
+        }
+    }
+
     Column(
         modifier = Modifier
-            .background(Color.White)
             .fillMaxSize()
+            .padding(top = 8.dp)
+            .background(Color.White)
     ) {
-        ScreenHeader(text = stringResource(R.string.search), onBackClick = {
-            navController.popBackStack()
-        })
+        ScreenHeader(
+            text = stringResource(R.string.search),
+            onBackClick = { navController.popBackStack() })
 
-        OutlinedTextField(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            value = textField,
-            onValueChange = { textField = it },
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = SecondaryGray,
-                focusedContainerColor = SecondaryGray,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            placeholder = {
-                Text(text = stringResource(R.string.search), style = MainTextStyle.copy(color = PrimaryGray))
-            },
-            prefix = {
-                Image(
-                    modifier = Modifier.padding(end = 8.dp).size(16.dp)
-                        .clickable {
-                        viewModel.search(textField)
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(SecondaryGray),
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
                     },
-                    painter = painterResource(R.drawable.search),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(PrimaryGray)
-                )
-            },
-            trailingIcon = {
-                if (textField.isNotEmpty()) {
-                    Icon(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .clickable { textField = "" },
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = stringResource(R.string.clearr),
-                        tint = PrimaryGray
+                value = text,
+                onValueChange = { text = it },
+                singleLine = true,
+                shape = RoundedCornerShape(0.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.search),
+                        style = MainTextStyle.copy(color = PrimaryGray)
                     )
-                }
+                },
+                prefix = {
+                    Image(
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(16.dp),
+                        painter = painterResource(R.drawable.search),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(PrimaryGray)
+                    )
+                },
+                trailingIcon = {
+                    if (text.isNotEmpty()) {
+                        Icon(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    text = ""
+                                    searchViewModel.clearSearch()
+                                },
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = stringResource(R.string.clearr),
+                            tint = PrimaryGray
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+
+            if (isFocused && text.isEmpty() && historyList.isNotEmpty()) {
+                HistoryRequests(
+                    historyList = historyList,
+                    onClick = { word ->
+                        text = word
+                    }
+                )
             }
-        )
+        }
+
         when (screenState) {
             is SearchState.Initial -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(stringResource(R.string.inputString))
-                }
-            }
-            is SearchState.Searching -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-            is SearchState.Success -> {
-                val tracks = (screenState as SearchState.Success).list
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(15.dp)
-                ) {
-                    items(tracks.size) { index ->
-                        TrackListItem(track = tracks[index])
-                        HorizontalDivider(thickness = 0.5.dp)
+                if (text.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            stringResource(R.string.search)
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
             }
+
+            is SearchState.Searching -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            is SearchState.Success -> {
+                val tracks = (screenState as SearchState.Success).list
+                if (tracks.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            stringResource(R.string.no_songs_found),
+                            color = Color.Red
+                        )
+                    }
+                } else {
+                    LazyColumn {
+                        items(tracks.size) { index ->
+                            TrackListItem(
+                                track = tracks[index]
+                            ) { onClick(index) }
+                        }
+                    }
+                }
+            }
+
             is SearchState.Fail -> {
                 val error = (screenState as SearchState.Fail).error
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("${R.string.error}: $error", color = Color.Red)
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            stringResource(R.string.error),
+                            color = Color.Red
+                        )
+                        Text(
+                            error,
+                            color = Color.Red,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
         }
