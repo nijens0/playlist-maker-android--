@@ -2,7 +2,7 @@ package com.example.playlistmaker.creator
 
 import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.domain.TracksRepository
-import com.example.playlistmaker.network.TracksRepositoryImpl
+import com.example.playlistmaker.data.TracksRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

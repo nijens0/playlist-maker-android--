@@ -23,8 +23,6 @@ class SearchViewModel(
     private val tracksRepository: TracksRepository,
     private val searchHistoryRepository: SearchHistoryRepository
 ) : ViewModel() {
-    // private val tracksRepository = TracksRepositoryImpl()
-    // private val searchHistoryRepository = SearchHistoryRepositoryImpl(scope = viewModelScope)
 
     private val _searchQuery = MutableStateFlow("")
     private val _searchScreenState = MutableStateFlow<SearchState>(SearchState.Initial)
