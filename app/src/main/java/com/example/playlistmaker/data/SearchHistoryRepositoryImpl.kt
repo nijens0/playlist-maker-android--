@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-class SearchHistoryRepositoryImpl(scope: CoroutineScope): SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(
+    scope: CoroutineScope
+): SearchHistoryRepository {
     private val database = DatabaseMock(scope = scope)
 
     override fun getHistoryRequests(): Flow<List<String>> {

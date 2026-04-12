@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 
 class TracksRepositoryImpl(
-    private val scope: CoroutineScope
+    scope: CoroutineScope
 ) : TracksRepository {
     private val database = DatabaseMock(scope = scope)
 
