@@ -24,5 +24,9 @@
     <string name="search_icon">Иконка поиска</string>
     <string name="add_playlist">Добавить плейлист</string>
     <string name="new_playlist">Новый плейлист\n</string>
+    <string name="playlist_image">Обложка плейлиста</string>
+    <string name="name">Название</string>
+    <string name="description">Описание</string>
+    <string name="create">Создать</string>
 
 </resources>
