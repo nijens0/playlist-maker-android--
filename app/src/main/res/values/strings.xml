@@ -22,5 +22,7 @@
     <string name="no_songs_found">Треки не найдены</string>
     <string name="songs">Треки</string>
     <string name="search_icon">Иконка поиска</string>
+    <string name="add_playlist">Добавить плейлист</string>
+    <string name="new_playlist">Новый плейлист\n</string>
 
 </resources>

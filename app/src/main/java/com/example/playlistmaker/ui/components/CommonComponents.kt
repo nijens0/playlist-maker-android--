@@ -1,12 +1,9 @@
 package com.example.playlistmaker.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.History
@@ -20,21 +17,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
+import com.example.playlistmaker.network.Playlist
 import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.themes.CommonTextStyle
 import com.example.playlistmaker.ui.themes.HeaderStyle
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
-import com.example.playlistmaker.ui.themes.SecondaryGray
 
 
 @Composable
@@ -83,6 +81,7 @@ fun TrackListItem(track: Track, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(61.dp)
             .clickable {
                 onClick()
             },
@@ -90,22 +89,61 @@ fun TrackListItem(track: Track, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
-            modifier = Modifier.size(45.dp),
+            modifier = Modifier
+                .size(45.dp)
+                .padding(start = 13.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
             painter = painterResource(id = R.drawable.ic_music),
             contentDescription = "${R.string.track}+${track.trackName}"
+        )
+        Column (
+            modifier = Modifier
+                .weight(1f)
+        ) {
+            Text(
+                text = track.trackName,
+                style = MainTextStyle,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = "${track.artistName} · ${track.trackTime}",
+                style = MainTextStyle.copy(color = PrimaryGray, fontSize = 11.sp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Image(
+            modifier = Modifier
+                .padding(start = 8.dp, end = 12.dp)
+                .size(24.dp),
+            painter = painterResource(id = R.drawable.arrow_forward),
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick.invoke() }),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = R.drawable.ic_music),
+            contentDescription = playlist.name,
+            colorFilter = ColorFilter.tint(Color.Gray)
         )
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(track.trackName, fontWeight = FontWeight.Bold)
-            Text(text = track.artistName)
-        }
-        Column(
-            modifier = Modifier.weight(0.2f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(track.trackTime)
+            Text(playlist.name, fontSize = 16.sp)
+            val text = "${playlist.tracks.size} tracks"
+            Text(text, fontSize = 11.sp, color = Color.Gray)
         }
     }
 }

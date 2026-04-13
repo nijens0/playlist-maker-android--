@@ -20,9 +20,11 @@ import com.example.playlistmaker.ui.search.SearchScreen
 import com.example.playlistmaker.ui.settings.SettingsScreen
 import com.example.playlistmaker.ui.view_model.SearchViewModel
 import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.playlist.PlaylistScreen
+import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(modifier: Modifier) {
     val navController = rememberNavController()
 
     NavHost(
@@ -33,17 +35,25 @@ fun AppNavigation() {
             MainMenuScreen(navController)
         }
         composable(Routes.SEARCH) {
-            val viewModel: SearchViewModel = viewModel(
+            val searchViewModel: SearchViewModel = viewModel(
                 factory = SearchViewModel.getViewModelFactory()
             )
-            SearchScreen(navController, viewModel) {navController.popBackStack()}
+            SearchScreen(modifier,navController, searchViewModel) { navController.popBackStack() }
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen(navController)
+            SettingsScreen(modifier,{ navController.popBackStack() })
         }
         composable(Routes.PLAYLISTS) {
-            val title = stringResource(id = R.string.playlists)
-            PlaceholderScreen(title) { navController.popBackStack() }
+            val playlistsViewModel: PlaylistsViewModel = viewModel(
+                factory = PlaylistsViewModel.getViewModelFactory()
+            )
+            PlaylistScreen(
+                modifier,
+                playlistsViewModel,
+                {},
+                {},
+                { navController.popBackStack() }
+            )
         }
         composable(Routes.FAVORITES) {
             val title = stringResource(id = R.string.favourite)
@@ -57,9 +67,11 @@ fun PlaceholderScreen(
     title: String,
     onBack: () -> Unit
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         ScreenHeader(title, onBack)
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "Screen: $title")

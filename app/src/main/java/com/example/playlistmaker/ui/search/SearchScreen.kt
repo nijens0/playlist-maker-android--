@@ -38,6 +38,7 @@ import com.example.playlistmaker.ui.view_model.SearchViewModel
 
 @Composable
 fun SearchScreen(
+    modifier: Modifier,
     navController: NavController,
     searchViewModel: SearchViewModel,
     onClick: (Int?) -> Unit
@@ -64,10 +65,7 @@ fun SearchScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 8.dp)
-            .background(Color.White)
+        modifier
     ) {
         ScreenHeader(
             text = stringResource(R.string.search),
