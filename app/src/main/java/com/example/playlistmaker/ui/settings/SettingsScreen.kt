@@ -28,17 +28,19 @@ import com.example.playlistmaker.ui.components.MenuButton
 import com.example.playlistmaker.ui.components.ScreenHeader
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    modifier: Modifier,
+    navigateBack: () -> Unit
+) {
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+        modifier
     ) {
-        ScreenHeader(text = stringResource(R.string.settings), onBackClick = {
-            navController.popBackStack()
-        })
+        ScreenHeader(
+            text = stringResource(R.string.settings),
+            onBackClick = navigateBack
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -62,7 +64,8 @@ fun SettingsScreen(navController: NavController) {
             try {
                 context.startActivity(supportIntent)
             } catch (_: Exception) {
-            } }) { RowTextToSupport() }
+            }
+        }) { RowTextToSupport() }
 
         MenuButton(onClick = {
             val agreementIntent =
