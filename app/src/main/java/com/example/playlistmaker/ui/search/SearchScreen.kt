@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.components.HistoryRequests
 import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.components.TrackListItem
@@ -39,9 +39,9 @@ import com.example.playlistmaker.ui.view_model.SearchViewModel
 @Composable
 fun SearchScreen(
     modifier: Modifier,
-    navController: NavController,
     searchViewModel: SearchViewModel,
-    onClick: (Int?) -> Unit
+    navigateBack: () -> Unit,
+    onClick: (Track?) -> Unit
 ) {
     val screenState by searchViewModel.searchScreenState.collectAsState()
     val historyList by searchViewModel.getHistoryList().collectAsState(initial = emptyList())
@@ -69,7 +69,8 @@ fun SearchScreen(
     ) {
         ScreenHeader(
             text = stringResource(R.string.search),
-            onBackClick = { navController.popBackStack() })
+            onBackClick = navigateBack
+        )
 
         Column(
             modifier = Modifier
@@ -186,7 +187,7 @@ fun SearchScreen(
                         items(tracks.size) { index ->
                             TrackListItem(
                                 track = tracks[index]
-                            ) { onClick(index) }
+                            ) { onClick(tracks[index]) }
                         }
                     }
                 }

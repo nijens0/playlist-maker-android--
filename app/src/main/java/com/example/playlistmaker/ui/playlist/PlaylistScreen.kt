@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.playlist
 
 import com.example.playlistmaker.R
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,9 +44,7 @@ fun PlaylistScreen(
                 onBackClick = navigateBack
             )
 
-            LazyColumn(
-
-            ) {
+            LazyColumn{
                 items(playlists.size) { index ->
                     PlaylistListItem(playlist = playlists[index]) {
                         navigateToPlaylist(index.toLong())

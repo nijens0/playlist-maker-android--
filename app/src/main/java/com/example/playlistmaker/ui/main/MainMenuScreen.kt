@@ -24,7 +24,9 @@ import com.example.playlistmaker.ui.components.MenuButton
 import com.example.playlistmaker.ui.navigation.Routes
 
 @Composable
-fun MainMenuScreen(navController: NavController) {
+fun MainMenuScreen(
+    onClick: (String) -> Unit
+) {
     Box(
         modifier = Modifier
             .background(AccentBlue)
@@ -53,10 +55,10 @@ fun MainMenuScreen(navController: NavController) {
                 Column(
                     modifier = Modifier.padding(top = 8.dp, start = 28.dp, end = 16.dp)
                 ) {
-                    MenuButton(onClick = { navController.navigate(Routes.SEARCH) }) { RowSearch() }
-                    MenuButton(onClick = { navController.navigate(Routes.PLAYLISTS) }) { RowPlaylists() }
-                    MenuButton(onClick = { navController.navigate(Routes.FAVORITES) }) { RowFavourite() }
-                    MenuButton(onClick = { navController.navigate(Routes.SETTINGS) }) { RowSettings() }
+                    MenuButton(onClick = { onClick(Routes.SEARCH) }) { RowSearch() }
+                    MenuButton(onClick = { onClick(Routes.PLAYLISTS) }) { RowPlaylists() }
+                    MenuButton(onClick = { onClick(Routes.FAVORITES) }) { RowFavourite() }
+                    MenuButton(onClick = { onClick(Routes.SETTINGS) }) { RowSettings() }
                 }
             }
         }

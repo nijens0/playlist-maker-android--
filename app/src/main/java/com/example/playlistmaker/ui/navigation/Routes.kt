@@ -8,5 +8,4 @@ object Routes {
     const val PLAYLISTS = "playlists"
     const val NEW_PLAYLIST = "newPlaylist"
     const val FAVORITES = "favorites"
-
 }

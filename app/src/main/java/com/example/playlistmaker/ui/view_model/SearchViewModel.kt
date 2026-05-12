@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.SearchHistoryRepository
 import com.example.playlistmaker.domain.TracksRepository
+import com.example.playlistmaker.network.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
+
 @OptIn(FlowPreview::class)
 class SearchViewModel(
     private val tracksRepository: TracksRepository,
@@ -27,6 +29,7 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
     private val _searchScreenState = MutableStateFlow<SearchState>(SearchState.Initial)
     val searchScreenState = _searchScreenState.asStateFlow()
+    var selectedTrack: Track? = null
 
     init {
         viewModelScope.launch {

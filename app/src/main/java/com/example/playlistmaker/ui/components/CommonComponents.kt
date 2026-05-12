@@ -70,6 +70,7 @@ fun ScreenHeader(text: String, onBackClick: () -> Unit) {
             )
         }
         Text(
+            modifier = Modifier.weight(1f),
             text = text,
             style = HeaderStyle
         )
@@ -142,7 +143,7 @@ fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(playlist.name, fontSize = 16.sp)
-            val text = "${playlist.tracks.size} tracks"
+            val text = "${playlist.tracks.size} ${stringResource(R.string.track)}s"
             Text(text, fontSize = 11.sp, color = Color.Gray)
         }
     }
