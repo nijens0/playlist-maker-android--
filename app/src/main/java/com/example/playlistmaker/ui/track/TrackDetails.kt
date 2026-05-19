@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.padding
@@ -93,8 +94,8 @@ fun TrackDetails(
             )
             Row(
                 modifier = Modifier
-                .padding(bottom = 24.dp)
-                .fillMaxWidth(),
+                    .padding(bottom = 24.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(
@@ -140,13 +141,26 @@ fun TrackDetails(
 
     if (isShowPanel) {
         ModalBottomSheet(
+            modifier = Modifier
+                .padding(horizontal = 13.dp),
             onDismissRequest = { isShowPanel = false },
             sheetState = sheetState
         ) {
-            LazyColumn {
-                items(playlists.size) { index ->
-                    PlaylistListItem(playlist = playlists[index]) {
-                        track.playlistId = playlists[index].id
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    text = stringResource(R.string.add_to_playlist),
+                    style = MainTextStyle.copy(fontSize = 19.sp),
+                )
+                LazyColumn(
+                    modifier = Modifier.padding(top = 24.dp)
+                ) {
+                    items(playlists.size) { index ->
+                        PlaylistListItem(playlist = playlists[index]) {
+                            track.playlistId = playlists[index].id
+                        }
                     }
                 }
             }

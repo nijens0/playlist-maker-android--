@@ -55,10 +55,10 @@ fun MainMenuScreen(
                 Column(
                     modifier = Modifier.padding(top = 8.dp, start = 28.dp, end = 16.dp)
                 ) {
-                    MenuButton(onClick = { onClick(Routes.SEARCH) }) { RowSearch() }
-                    MenuButton(onClick = { onClick(Routes.PLAYLISTS) }) { RowPlaylists() }
-                    MenuButton(onClick = { onClick(Routes.FAVORITES) }) { RowFavourite() }
-                    MenuButton(onClick = { onClick(Routes.SETTINGS) }) { RowSettings() }
+                    MenuButton(onClick = { onClick(Routes.SEARCH.route) }) { RowSearch() }
+                    MenuButton(onClick = { onClick(Routes.PLAYLISTS.route) }) { RowPlaylists() }
+                    MenuButton(onClick = { onClick(Routes.FAVORITES.route) }) { RowFavourite() }
+                    MenuButton(onClick = { onClick(Routes.SETTINGS.route) }) { RowSettings() }
                 }
             }
         }
