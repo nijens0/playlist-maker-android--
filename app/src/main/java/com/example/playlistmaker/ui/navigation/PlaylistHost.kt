@@ -55,9 +55,9 @@ fun AppNavigation(modifier: Modifier) {
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 searchViewModel = searchViewModel,
-                onClick = { track ->
+                navigateToTrackDetails = { track ->
                     searchViewModel.selectedTrack = track
-                    navController.navigate(Routes.TRACK_DETAILS)
+                    navController.navigate(Routes.TRACK_DETAILS.route)
                 }
             )
         }
@@ -94,7 +94,7 @@ fun AppNavigation(modifier: Modifier) {
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 playlistViewModel = playlistViewModel,
-                onClick = { track ->
+                navigateToTrackDetails = { track ->
                     searchViewModel.selectedTrack = track
                     navController.navigate(Routes.TRACK_DETAILS)
                 }
@@ -110,11 +110,12 @@ fun AppNavigation(modifier: Modifier) {
         }
 
         composable(Routes.TRACK_DETAILS.route) {
-            val selectedTrack = searchViewModel.selectedTrack
-            if (selectedTrack != null) {
+            val track = searchViewModel.selectedTrack
+
+            if (track != null) {
                 TrackDetails(
                     modifier = modifier,
-                    track = selectedTrack,
+                    track = track,
                     playlistsViewModel = playlistsViewModel,
                     navigateBack = { navController.popBackStack() }
                 )

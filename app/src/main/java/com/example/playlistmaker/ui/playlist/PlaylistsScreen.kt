@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.playlistmaker.network.Playlist
 import com.example.playlistmaker.ui.components.PlaylistListItem
 import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.view_model.PlaylistsViewModel

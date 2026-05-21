@@ -159,7 +159,8 @@ fun TrackDetails(
                 ) {
                     items(playlists.size) { index ->
                         PlaylistListItem(playlist = playlists[index]) {
-                            track.playlistId = playlists[index].id
+                            playlistsViewModel.insertTrackToPlaylist(track, playlists[index].id)
+                            isShowPanel = false
                         }
                     }
                 }

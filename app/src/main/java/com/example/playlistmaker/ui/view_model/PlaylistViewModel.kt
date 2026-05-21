@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
 class PlaylistViewModel(
-    private val playlistsRepository: PlaylistsRepository,
-    private val playlistId: Long
+    playlistsRepository: PlaylistsRepository,
+    playlistId: Long
 ) : ViewModel() {
 
     val playlistScreenState: StateFlow<PlaylistState> = playlistsRepository.getPlaylist(playlistId)

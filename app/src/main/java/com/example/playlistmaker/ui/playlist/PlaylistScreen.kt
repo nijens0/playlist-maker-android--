@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.playlist
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +36,7 @@ fun PlaylistScreen(
     modifier: Modifier,
     navigateBack: () -> Unit,
     playlistViewModel: PlaylistViewModel,
-    onClick: (Track?) -> Unit
+    navigateToTrackDetails: (Track?) -> Unit
 ) {
     val playlistState by playlistViewModel.playlistScreenState.collectAsState()
 
@@ -66,33 +67,38 @@ fun PlaylistScreen(
                     painter = painterResource(R.drawable.add_photo),
                     contentDescription = stringResource(R.string.playlist_image),
                 )
-                Text(
-                    text = playlist.name,
-                    style = MainTextStyle.copy(fontSize = 24.sp)
-                )
-                val totalMinutes = playlist.tracks.sumOf { track ->
-                    val parts = track.trackTime.split(":")
-                    val minutes = parts.getOrNull(0)?.toLongOrNull() ?: 0L
-                    val seconds = parts.getOrNull(1)?.toLongOrNull() ?: 0L
-                    (minutes * 60) + seconds
-                } / 60
-                val tracks = playlist.tracks.size
-                Text(
-                    text = "$totalMinutes • $tracks"
-                )
-                IconButton(
-                    onClick = {}
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = stringResource(R.string.more)
+                    Text(
+                        text = playlist.name,
+                        style = MainTextStyle.copy(fontSize = 24.sp)
                     )
-                }
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(playlist.tracks.size) { index ->
+                    val totalMinutes = playlist.tracks.sumOf { track ->
+                        val parts = track.trackTime.split(":")
+                        val minutes = parts.getOrNull(0)?.toLongOrNull() ?: 0L
+                        val seconds = parts.getOrNull(1)?.toLongOrNull() ?: 0L
+                        (minutes * 60) + seconds
+                    } / 60
+                    val tracks = playlist.tracks.size
+                    Text(
+                        text = "$totalMinutes • $tracks"
+                    )
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.more)
+                        )
+                    }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(playlist.tracks.size) { index ->
 
+                        }
                     }
                 }
             }

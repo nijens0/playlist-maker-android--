@@ -4,6 +4,7 @@ import com.example.playlistmaker.network.Track
 import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
+
     suspend fun getALlTracks(): List<Track>
 
     suspend fun searchTracks(expression: String): List<Track>
