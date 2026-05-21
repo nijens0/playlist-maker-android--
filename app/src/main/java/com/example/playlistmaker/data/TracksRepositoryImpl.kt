@@ -14,12 +14,10 @@ class TracksRepositoryImpl(
     private val database = DatabaseMock(scope = scope)
 
     override suspend fun getALlTracks(): List<Track> {
-        delay(1000)
         return listTracks
     }
 
     override suspend fun searchTracks(expression: String): List<Track> {
-        delay(1000)
         return listTracks.filter {
             it.trackName.lowercase().contains(expression.lowercase()) ||
                     it.artistName.lowercase().contains(expression.lowercase())
