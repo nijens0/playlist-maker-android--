@@ -12,16 +12,16 @@ import com.example.playlistmaker.network.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
     private val playlistsRepository: PlaylistsRepository,
-    private val tracksRepository: TracksRepository,
-    private val databaseRepository: DatabaseMock
+    private val tracksRepository: TracksRepository
 ) : ViewModel() {
 
     val playlists: Flow<List<Playlist>> = playlistsRepository.getAllPlaylists() // Потенциально на подумать?
-    val favouriteList: Flow<List<Track>> = databaseRepository.getFavouriteTracks()
+    val favouriteList: Flow<List<Track>> = flow { emit(emptyList()) }
 
     fun createNewPlaylist(namePlaylist: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -58,12 +58,10 @@ class PlaylistsViewModel(
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     val tracksRepository = Creator.getTracksRepository()
-                    val playlistsRepository = Creator.getPlaylistRepository()
-                    val databaseRepository = Creator.getDataBaseRepository()
+                    val playlistsRepository = Creator.getPlaylistsRepository()
                     return PlaylistsViewModel(
                         tracksRepository = tracksRepository,
-                        playlistsRepository = playlistsRepository,
-                        databaseRepository = databaseRepository
+                        playlistsRepository = playlistsRepository
                     ) as T
                 }
             }
