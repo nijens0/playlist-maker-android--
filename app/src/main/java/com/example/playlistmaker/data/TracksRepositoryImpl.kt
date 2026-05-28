@@ -26,7 +26,7 @@ class TracksRepositoryImpl(
                     trackName = trackDto.trackName,
                     artistName = trackDto.artistName,
                     trackTime = trackTimeFormatter.format(trackDto.trackTimeMillis),
-                    image = trackDto.image ?: "",
+                    image = trackDto.image?.replace("100x100bb.jpg", "512x512bb.jpg") ?: "",
                     favourite = false,
                     playlistId = 0,
                 )

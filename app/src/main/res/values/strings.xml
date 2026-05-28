@@ -33,5 +33,6 @@
     <string name="duration">Длительность</string>
     <string name="more">Ещё</string>
     <string name="playlist_is_not_found">Плейлист не найден</string>
+    <string name="tracks_cover">Обложка трека</string>
 
 </resources>

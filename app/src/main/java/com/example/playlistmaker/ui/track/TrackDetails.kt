@@ -33,9 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.components.PlaylistListItem
 import com.example.playlistmaker.ui.components.ScreenHeader
@@ -74,13 +76,15 @@ fun TrackDetails(
         Column(
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Icon(
+            AsyncImage(
                 modifier = Modifier
+                    .padding(bottom = 24.dp, top = 24.dp)
                     .size(312.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(24.dp),
-                imageVector = Icons.Default.MusicVideo,
-                contentDescription = null
+                    .align(Alignment.CenterHorizontally),
+                model = track.image,
+                contentDescription = stringResource(R.string.tracks_cover),
+                placeholder = painterResource(R.drawable.ic_music),
+                error = painterResource(R.drawable.ic_music)
             )
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
@@ -111,8 +115,10 @@ fun TrackDetails(
                 }
                 IconButton(
                     modifier = Modifier
-                        .background(animatedBackgroundColor,
-                        shape = CircleShape),
+                        .background(
+                            animatedBackgroundColor,
+                            shape = CircleShape
+                        ),
                     onClick = {
                         isFavorite = !isFavorite
                         track.favourite = isFavorite

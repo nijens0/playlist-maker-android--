@@ -22,10 +22,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.network.Playlist
 import com.example.playlistmaker.network.Track
@@ -89,14 +89,16 @@ fun TrackListItem(track: Track, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
-                .size(45.dp)
-                .padding(start = 13.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
-            painter = painterResource(id = R.drawable.ic_music),
-            contentDescription = "${R.string.track}+${track.trackName}"
+                .padding(start = 13.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                .size(45.dp),
+            model = track.image,
+            contentDescription = "${R.string.track}+${track.trackName}",
+            placeholder = painterResource(R.drawable.ic_music),
+            error = painterResource(R.drawable.ic_music)
         )
-        Column (
+        Column(
             modifier = Modifier
                 .weight(1f)
         ) {
