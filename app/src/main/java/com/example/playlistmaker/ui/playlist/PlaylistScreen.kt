@@ -1,74 +1,117 @@
 package com.example.playlistmaker.ui.playlist
 
-import com.example.playlistmaker.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.playlistmaker.ui.components.PlaylistListItem
+import androidx.compose.ui.unit.sp
+import com.example.playlistmaker.R
+import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.components.ScreenHeader
-import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.themes.MainTextStyle
+import com.example.playlistmaker.ui.view_model.PlaylistState
+import com.example.playlistmaker.ui.view_model.PlaylistViewModel
 
 @Composable
 fun PlaylistScreen(
     modifier: Modifier,
-    playlistsViewModel: PlaylistsViewModel,
-    addNewPlaylist: () -> Unit,
-    navigateToPlaylist: (Long) -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    playlistViewModel: PlaylistViewModel,
+    navigateToTrackDetails: (Track?) -> Unit
 ) {
-    val playlists by playlistsViewModel.playlists.collectAsState(emptyList())
+    val playlistState by playlistViewModel.playlistScreenState.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier
-        ) {
-            ScreenHeader(
-                text = stringResource(R.string.playlists),
-                onBackClick = navigateBack
-            )
 
-            LazyColumn{
-                items(playlists.size) { index ->
-                    PlaylistListItem(playlist = playlists[index]) {
-                        navigateToPlaylist(index.toLong())
+    when (playlistState) {
+        is PlaylistState.Loading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is PlaylistState.Success -> {
+            val playlist = (playlistState as PlaylistState.Success).playlist
+            Column(modifier) {
+                ScreenHeader(
+                    text = "",
+                    onBackClick = navigateBack
+                )
+                Image(
+                    modifier = Modifier
+                        .padding(vertical = 138.dp)
+                        .size(100.dp)
+                        .align(Alignment.CenterHorizontally),
+                    painter = painterResource(R.drawable.add_photo),
+                    contentDescription = stringResource(R.string.playlist_image),
+                )
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = playlist.name,
+                        style = MainTextStyle.copy(fontSize = 24.sp)
+                    )
+                    val totalMinutes = playlist.tracks.sumOf { track ->
+                        val parts = track.trackTime.split(":")
+                        val minutes = parts.getOrNull(0)?.toLongOrNull() ?: 0L
+                        val seconds = parts.getOrNull(1)?.toLongOrNull() ?: 0L
+                        (minutes * 60) + seconds
+                    } / 60
+                    val tracks = playlist.tracks.size
+                    Text(
+                        text = "$totalMinutes • $tracks"
+                    )
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.more)
+                        )
+                    }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(playlist.tracks.size) { index ->
+
+                        }
                     }
                 }
             }
         }
 
-        SmallFloatingActionButton (
-            modifier = Modifier
-                .padding(end = 17.dp, bottom = 32.dp)
-                .size(51.dp)
-                .align(Alignment.BottomEnd)
-                .alpha(0.25f),
-            onClick = addNewPlaylist,
-            containerColor = Color(0xFF1A1B22),
-            contentColor = Color.White,
-            shape = CircleShape
-        ) {
-            Icon(
-                modifier = Modifier.size(36.dp),
-                imageVector = Icons.Filled.Add,
-                contentDescription = stringResource(R.string.add_playlist)
-            )
+        is PlaylistState.Error -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+
+            }
         }
     }
 }

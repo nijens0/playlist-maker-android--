@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.navigation
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.main.MainMenuScreen
 import com.example.playlistmaker.ui.search.SearchScreen
@@ -23,7 +24,9 @@ import com.example.playlistmaker.ui.view_model.SearchViewModel
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.playlist.NewPlaylistScreen
 import com.example.playlistmaker.ui.playlist.PlaylistScreen
+import com.example.playlistmaker.ui.playlist.PlaylistsScreen
 import com.example.playlistmaker.ui.track.TrackDetails
+import com.example.playlistmaker.ui.view_model.PlaylistViewModel
 import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
 
 @Composable
@@ -40,42 +43,65 @@ fun AppNavigation(modifier: Modifier) {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.MAIN
+        startDestination = Routes.MAIN.route
     ) {
 
-        composable(Routes.MAIN) {
-            MainMenuScreen(onClick = { navController.navigate(it) } )
+        composable(Routes.MAIN.route) {
+            MainMenuScreen(onClick = { navController.navigate(it) })
         }
 
-        composable(Routes.SEARCH) {
+        composable(Routes.SEARCH.route) {
             SearchScreen(
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 searchViewModel = searchViewModel,
-                onClick = { track ->
+                navigateToTrackDetails = { track ->
+                    searchViewModel.selectedTrack = track
+                    navController.navigate(Routes.TRACK_DETAILS.route)
+                }
+            )
+        }
+
+        composable(Routes.SETTINGS.route) {
+            SettingsScreen(
+                modifier = modifier,
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(Routes.PLAYLISTS.route) {
+            PlaylistsScreen(
+                modifier = modifier,
+                playlistsViewModel = playlistsViewModel,
+                addNewPlaylist = { navController.navigate(Routes.NEW_PLAYLIST.route) },
+                navigateToPlaylist = { id ->
+                    navController.navigate(Routes.PLAYLIST.withArgs(id))
+                },
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "${Routes.PLAYLIST.route}/{playlistId}",
+            arguments = listOf(navArgument("playlistId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getLong("playlistId") ?: 0L
+
+            val playlistViewModel: PlaylistViewModel = viewModel(
+                factory = PlaylistViewModel.getViewModelFactory(playlistId)
+            )
+
+            PlaylistScreen(
+                modifier = modifier,
+                navigateBack = { navController.popBackStack() },
+                playlistViewModel = playlistViewModel,
+                navigateToTrackDetails = { track ->
                     searchViewModel.selectedTrack = track
                     navController.navigate(Routes.TRACK_DETAILS)
                 }
             )
         }
 
-        composable(Routes.SETTINGS) {
-            SettingsScreen(
-                modifier = modifier,
-                navigateBack = { navController.popBackStack() }
-            )
-        }
-        composable(Routes.PLAYLISTS) {
-            PlaylistScreen(
-                modifier,
-                playlistsViewModel,
-                addNewPlaylist = { navController.navigate(Routes.NEW_PLAYLIST) },
-                navigateToPlaylist = {},
-                navigateBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(Routes.NEW_PLAYLIST) {
+        composable(Routes.NEW_PLAYLIST.route) {
             NewPlaylistScreen(
                 modifier = modifier,
                 playlistsViewModel = playlistsViewModel,
@@ -83,19 +109,20 @@ fun AppNavigation(modifier: Modifier) {
             )
         }
 
-        composable(Routes.TRACK_DETAILS) {
-            val selectedTrack = searchViewModel.selectedTrack
-            if (selectedTrack != null) {
+        composable(Routes.TRACK_DETAILS.route) {
+            val track = searchViewModel.selectedTrack
+
+            if (track != null) {
                 TrackDetails(
                     modifier = modifier,
-                    track = selectedTrack,
+                    track = track,
                     playlistsViewModel = playlistsViewModel,
                     navigateBack = { navController.popBackStack() }
                 )
             }
         }
 
-        composable(Routes.FAVORITES) {
+        composable(Routes.FAVORITES.route) {
             val title = stringResource(id = R.string.favourite)
             PlaceholderScreen(title) { navController.popBackStack() }
         }

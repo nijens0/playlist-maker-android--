@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import com.example.playlistmaker.R
 import androidx.compose.foundation.layout.padding
@@ -32,9 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.playlistmaker.network.Track
 import com.example.playlistmaker.ui.components.PlaylistListItem
 import com.example.playlistmaker.ui.components.ScreenHeader
@@ -73,13 +76,15 @@ fun TrackDetails(
         Column(
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Icon(
+            AsyncImage(
                 modifier = Modifier
+                    .padding(bottom = 24.dp, top = 24.dp)
                     .size(312.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(24.dp),
-                imageVector = Icons.Default.MusicVideo,
-                contentDescription = null
+                    .align(Alignment.CenterHorizontally),
+                model = track.image,
+                contentDescription = stringResource(R.string.tracks_cover),
+                placeholder = painterResource(R.drawable.ic_music),
+                error = painterResource(R.drawable.ic_music)
             )
             Text(
                 modifier = Modifier.padding(bottom = 12.dp),
@@ -93,8 +98,8 @@ fun TrackDetails(
             )
             Row(
                 modifier = Modifier
-                .padding(bottom = 24.dp)
-                .fillMaxWidth(),
+                    .padding(bottom = 24.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(
@@ -110,8 +115,10 @@ fun TrackDetails(
                 }
                 IconButton(
                     modifier = Modifier
-                        .background(animatedBackgroundColor,
-                        shape = CircleShape),
+                        .background(
+                            animatedBackgroundColor,
+                            shape = CircleShape
+                        ),
                     onClick = {
                         isFavorite = !isFavorite
                         track.favourite = isFavorite
@@ -140,13 +147,27 @@ fun TrackDetails(
 
     if (isShowPanel) {
         ModalBottomSheet(
+            modifier = Modifier
+                .padding(horizontal = 13.dp),
             onDismissRequest = { isShowPanel = false },
             sheetState = sheetState
         ) {
-            LazyColumn {
-                items(playlists.size) { index ->
-                    PlaylistListItem(playlist = playlists[index]) {
-                        track.playlistId = playlists[index].id
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    text = stringResource(R.string.add_to_playlist),
+                    style = MainTextStyle.copy(fontSize = 19.sp),
+                )
+                LazyColumn(
+                    modifier = Modifier.padding(top = 24.dp)
+                ) {
+                    items(playlists.size) { index ->
+                        PlaylistListItem(playlist = playlists[index]) {
+                            playlistsViewModel.insertTrackToPlaylist(track, playlists[index].id)
+                            isShowPanel = false
+                        }
                     }
                 }
             }

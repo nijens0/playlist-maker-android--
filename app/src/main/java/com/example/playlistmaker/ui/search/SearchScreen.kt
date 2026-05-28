@@ -41,7 +41,7 @@ fun SearchScreen(
     modifier: Modifier,
     searchViewModel: SearchViewModel,
     navigateBack: () -> Unit,
-    onClick: (Track?) -> Unit
+    navigateToTrackDetails: (Track?) -> Unit
 ) {
     val screenState by searchViewModel.searchScreenState.collectAsState()
     val historyList by searchViewModel.getHistoryList().collectAsState(initial = emptyList())
@@ -187,7 +187,7 @@ fun SearchScreen(
                         items(tracks.size) { index ->
                             TrackListItem(
                                 track = tracks[index]
-                            ) { onClick(tracks[index]) }
+                            ) { navigateToTrackDetails(tracks[index]) }
                         }
                     }
                 }
