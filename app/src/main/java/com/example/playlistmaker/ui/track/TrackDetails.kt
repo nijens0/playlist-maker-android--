@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.ui.components.PlaylistListItem
 import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.themes.MainTextStyle

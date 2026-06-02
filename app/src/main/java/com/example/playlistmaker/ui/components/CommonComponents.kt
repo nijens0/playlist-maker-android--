@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.playlistmaker.R
-import com.example.playlistmaker.network.Playlist
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Playlist
+import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.ui.themes.CommonTextStyle
 import com.example.playlistmaker.ui.themes.HeaderStyle
 import com.example.playlistmaker.ui.themes.MainTextStyle
@@ -145,7 +145,7 @@ fun PlaylistListItem(playlist: Playlist, onClick: () -> Unit) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(playlist.name, fontSize = 16.sp)
-            val text = "${playlist.tracks.size} ${stringResource(R.string.track)}s"
+            val text = "${playlist.tracks.size} ${stringResource(R.string.track)}ов"
             Text(text, fontSize = 11.sp, color = Color.Gray)
         }
     }

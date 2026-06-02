@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -34,11 +35,11 @@ fun AppNavigation(modifier: Modifier) {
     val navController = rememberNavController()
 
     val searchViewModel: SearchViewModel = viewModel(
-        factory = SearchViewModel.getViewModelFactory()
+        factory = SearchViewModel.getViewModelFactory(LocalContext.current.applicationContext)
     )
 
     val playlistsViewModel: PlaylistsViewModel = viewModel(
-        factory = PlaylistsViewModel.getViewModelFactory()
+        factory = PlaylistsViewModel.getViewModelFactory(LocalContext.current.applicationContext)
     )
 
     NavHost(
@@ -86,8 +87,13 @@ fun AppNavigation(modifier: Modifier) {
         ) { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getLong("playlistId") ?: 0L
 
+            val context = LocalContext.current.applicationContext
+
             val playlistViewModel: PlaylistViewModel = viewModel(
-                factory = PlaylistViewModel.getViewModelFactory(playlistId)
+                factory = PlaylistViewModel.getViewModelFactory(
+                    playlistId = playlistId,
+                    context = context
+                )
             )
 
             PlaylistScreen(
@@ -96,7 +102,7 @@ fun AppNavigation(modifier: Modifier) {
                 playlistViewModel = playlistViewModel,
                 navigateToTrackDetails = { track ->
                     searchViewModel.selectedTrack = track
-                    navController.navigate(Routes.TRACK_DETAILS)
+                    navController.navigate(Routes.TRACK_DETAILS.route)
                 }
             )
         }

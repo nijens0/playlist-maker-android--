@@ -25,8 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.ui.components.ScreenHeader
+import com.example.playlistmaker.ui.components.TrackListItem
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.view_model.PlaylistState
 import com.example.playlistmaker.ui.view_model.PlaylistViewModel
@@ -81,9 +82,9 @@ fun PlaylistScreen(
                         val seconds = parts.getOrNull(1)?.toLongOrNull() ?: 0L
                         (minutes * 60) + seconds
                     } / 60
-                    val tracks = playlist.tracks.size
+                    val tracks = playlist.tracks
                     Text(
-                        text = "$totalMinutes • $tracks"
+                        text = "$totalMinutes минут • ${tracks.size} треков"
                     )
                     IconButton(
                         onClick = {}
@@ -97,7 +98,9 @@ fun PlaylistScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         items(playlist.tracks.size) { index ->
-
+                            TrackListItem(
+                                track = tracks[index]
+                            ) { navigateToTrackDetails(tracks[index]) }
                         }
                     }
                 }

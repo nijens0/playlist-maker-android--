@@ -1,18 +1,17 @@
 package com.example.playlistmaker.ui.view_model
 
-import DatabaseMock
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.PlaylistsRepository
 import com.example.playlistmaker.domain.TracksRepository
-import com.example.playlistmaker.network.Playlist
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Playlist
+import com.example.playlistmaker.domain.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
@@ -20,8 +19,8 @@ class PlaylistsViewModel(
     private val tracksRepository: TracksRepository
 ) : ViewModel() {
 
-    val playlists: Flow<List<Playlist>> = playlistsRepository.getAllPlaylists() // Потенциально на подумать?
-    val favouriteList: Flow<List<Track>> = flow { emit(emptyList()) }
+    val playlists: Flow<List<Playlist>> = playlistsRepository.getAllPlaylists()
+    val favouriteList: Flow<List<Track>> = tracksRepository.getFavoriteTracks()
 
     fun createNewPlaylist(namePlaylist: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -39,8 +38,8 @@ class PlaylistsViewModel(
         tracksRepository.updateTrackFavouriteStatus(track, isFavourite)
     }
 
-    suspend fun deleteTrackFromPlaylist(track: Track) {
-        tracksRepository.deleteTrackFromPlaylist(track)
+    suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Long) {
+        tracksRepository.deleteTrackFromPlaylist(playlistId,track.id)
     }
 
     suspend fun deletePlaylistById(id: Long) {
@@ -53,12 +52,12 @@ class PlaylistsViewModel(
     }
 
     companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory =
+        fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    val tracksRepository = Creator.getTracksRepository()
-                    val playlistsRepository = Creator.getPlaylistsRepository()
+                    val tracksRepository = Creator.getTracksRepository(context)
+                    val playlistsRepository = Creator.getPlaylistsRepository(context)
                     return PlaylistsViewModel(
                         tracksRepository = tracksRepository,
                         playlistsRepository = playlistsRepository

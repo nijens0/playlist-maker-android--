@@ -1,6 +1,6 @@
 package com.example.playlistmaker.ui.view_model
 
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Track
 
 sealed class SearchState {
     data object Initial: SearchState()

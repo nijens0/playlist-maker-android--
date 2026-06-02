@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.androidx.room)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.ksp)
     testImplementation(libs.junit)

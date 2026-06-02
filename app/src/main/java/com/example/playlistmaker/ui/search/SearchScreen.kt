@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.ui.components.HistoryRequests
 import com.example.playlistmaker.ui.components.ScreenHeader
 import com.example.playlistmaker.ui.components.TrackListItem
