@@ -1,7 +1,7 @@
-package com.example.playlistmaker.ui.view_model
+package com.example.playlistmaker.ui.view_models
 
 import androidx.annotation.StringRes
-import com.example.playlistmaker.network.Playlist
+import com.example.playlistmaker.domain.Playlist
 
 sealed class PlaylistState {
     data object Loading: PlaylistState()

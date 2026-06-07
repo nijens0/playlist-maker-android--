@@ -21,9 +21,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.playlistmaker.ui.components.PlaylistListItem
-import com.example.playlistmaker.ui.components.ScreenHeader
-import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.navigation.ScreenHeader
+import com.example.playlistmaker.ui.view_models.PlaylistsViewModel
 
 @Composable
 fun PlaylistsScreen(

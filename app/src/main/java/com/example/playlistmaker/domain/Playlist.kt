@@ -1,4 +1,4 @@
-package com.example.playlistmaker.network
+package com.example.playlistmaker.domain
 
 data class Playlist(
     val id: Long = 0,

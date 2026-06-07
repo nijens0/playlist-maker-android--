@@ -1,12 +1,13 @@
-package com.example.playlistmaker.ui.view_model
+package com.example.playlistmaker.ui.view_models
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.SearchHistoryRepository
 import com.example.playlistmaker.domain.TracksRepository
-import com.example.playlistmaker.network.Track
+import com.example.playlistmaker.domain.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -55,9 +56,14 @@ class SearchViewModel(
                 searchHistoryRepository.addToHistory(word = request)
 
                 val list = tracksRepository.searchTracks(expression = request)
-                _searchScreenState.update { SearchState.Success(list = list) }
-            } catch (e: IOException) {
-                _searchScreenState.update { SearchState.Fail(e.message.toString()) }
+
+                if (list.isEmpty()) _searchScreenState.update { SearchState.EmptyResult }
+                else _searchScreenState.update { SearchState.Success(list = list) }
+
+            } catch (_: IOException) {
+                _searchScreenState.update { SearchState.NoInternet }
+            } catch (e: Exception) {
+                _searchScreenState.update { SearchState.Fail(error = e.message.toString()) }
             }
         }
     }
@@ -70,12 +76,12 @@ class SearchViewModel(
 
 
     companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory =
+        fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T: ViewModel> create(modelClass: Class<T>): T {
-                    val tracksRepository = Creator.getTracksRepository()
-                    val searchHistoryRepository = Creator.getSearchHistoryRepository()
+                    val tracksRepository = Creator.getTracksRepository(context)
+                    val searchHistoryRepository = Creator.getSearchHistoryRepository(context)
                     return SearchViewModel(
                         tracksRepository = tracksRepository,
                         searchHistoryRepository = searchHistoryRepository) as T

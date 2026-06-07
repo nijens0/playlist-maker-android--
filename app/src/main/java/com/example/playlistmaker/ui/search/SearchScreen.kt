@@ -23,18 +23,18 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.network.Track
-import com.example.playlistmaker.ui.components.HistoryRequests
-import com.example.playlistmaker.ui.components.ScreenHeader
-import com.example.playlistmaker.ui.components.TrackListItem
+import com.example.playlistmaker.domain.Track
+import com.example.playlistmaker.ui.navigation.ScreenHeader
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
 import com.example.playlistmaker.ui.themes.SecondaryGray
-import com.example.playlistmaker.ui.view_model.SearchState
-import com.example.playlistmaker.ui.view_model.SearchViewModel
+import com.example.playlistmaker.ui.track.TrackListItem
+import com.example.playlistmaker.ui.view_models.SearchState
+import com.example.playlistmaker.ui.view_models.SearchViewModel
 
 @Composable
 fun SearchScreen(
@@ -190,6 +190,54 @@ fun SearchScreen(
                             ) { navigateToTrackDetails(tracks[index]) }
                         }
                     }
+                }
+            }
+
+            is SearchState.NoInternet -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .padding(top = 102.dp, bottom = 16.dp)
+                            .width(120.dp)
+                            .height(120.dp),
+                        painter = painterResource(R.drawable.connection_trubles),
+                        contentDescription = stringResource(R.string.connection_troubles)
+                    )
+                    Text(
+                        modifier = Modifier.padding(bottom = 24.dp),
+                        text = stringResource(R.string.connection_troubles),
+                        textAlign = TextAlign.Center,
+                        style = MainTextStyle
+                    )
+                    Text(
+                        text = stringResource(R.string.load_is_failed),
+                        textAlign = TextAlign.Center,
+                        style = MainTextStyle
+                    )
+                }
+            }
+
+            is SearchState.EmptyResult -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .padding(top = 102.dp, bottom = 16.dp)
+                            .width(120.dp)
+                            .height(120.dp),
+                        painter = painterResource(R.drawable.track_is_not_found),
+                        contentDescription = stringResource(R.string.nothing_is_found)
+                    )
+                    Text(
+                        text = stringResource(R.string.nothing_is_found),
+                        style = MainTextStyle,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 

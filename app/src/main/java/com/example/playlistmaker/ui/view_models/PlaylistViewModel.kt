@@ -1,5 +1,6 @@
-package com.example.playlistmaker.ui.view_model
+package com.example.playlistmaker.ui.view_models
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -32,11 +33,11 @@ class PlaylistViewModel(
 
 
     companion object {
-        fun getViewModelFactory(playlistId: Long): ViewModelProvider.Factory =
+        fun getViewModelFactory(playlistId: Long, context: Context): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    val tracksRepository = Creator.getPlaylistsRepository()
+                    val tracksRepository = Creator.getPlaylistsRepository(context)
 
                     return PlaylistViewModel(tracksRepository, playlistId) as T
                 }

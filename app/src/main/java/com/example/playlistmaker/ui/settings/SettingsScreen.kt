@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.settings
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
@@ -19,13 +18,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.main.MenuButton
+import com.example.playlistmaker.ui.navigation.ScreenHeader
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
 import com.example.playlistmaker.ui.themes.SecondaryGray
-import com.example.playlistmaker.ui.components.MenuButton
-import com.example.playlistmaker.ui.components.ScreenHeader
 
 @Composable
 fun SettingsScreen(

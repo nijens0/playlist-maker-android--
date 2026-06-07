@@ -27,12 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.ui.components.ScreenHeader
+import com.example.playlistmaker.ui.navigation.ScreenHeader
 import com.example.playlistmaker.ui.themes.AccentBlue
 import com.example.playlistmaker.ui.themes.CommonTextStyle
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
-import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.view_models.PlaylistsViewModel
 
 
 @Composable
