@@ -26,11 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.Track
-import com.example.playlistmaker.ui.components.ScreenHeader
-import com.example.playlistmaker.ui.components.TrackListItem
+import com.example.playlistmaker.ui.navigation.ScreenHeader
 import com.example.playlistmaker.ui.themes.MainTextStyle
-import com.example.playlistmaker.ui.view_model.PlaylistState
-import com.example.playlistmaker.ui.view_model.PlaylistViewModel
+import com.example.playlistmaker.ui.track.TrackListItem
+import com.example.playlistmaker.ui.view_models.PlaylistState
+import com.example.playlistmaker.ui.view_models.PlaylistViewModel
 
 @Composable
 fun PlaylistScreen(

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.view_model
+package com.example.playlistmaker.ui.view_models
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -56,9 +56,14 @@ class SearchViewModel(
                 searchHistoryRepository.addToHistory(word = request)
 
                 val list = tracksRepository.searchTracks(expression = request)
-                _searchScreenState.update { SearchState.Success(list = list) }
-            } catch (e: IOException) {
-                _searchScreenState.update { SearchState.Fail(e.message.toString()) }
+
+                if (list.isEmpty()) _searchScreenState.update { SearchState.EmptyResult }
+                else _searchScreenState.update { SearchState.Success(list = list) }
+
+            } catch (_: IOException) {
+                _searchScreenState.update { SearchState.NoInternet }
+            } catch (e: Exception) {
+                _searchScreenState.update { SearchState.Fail(error = e.message.toString()) }
             }
         }
     }

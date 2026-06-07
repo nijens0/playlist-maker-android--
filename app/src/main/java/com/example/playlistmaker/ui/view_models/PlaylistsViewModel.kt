@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.view_model
+package com.example.playlistmaker.ui.view_models
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -34,8 +34,10 @@ class PlaylistsViewModel(
         }
     }
 
-    suspend fun toggleFavourite(track: Track, isFavourite: Boolean) {
-        tracksRepository.updateTrackFavouriteStatus(track, isFavourite)
+    fun toggleFavourite(track: Track, isFavorite: Boolean) {
+        viewModelScope.launch {
+            tracksRepository.updateTrackFavouriteStatus(track, isFavorite)
+        }
     }
 
     suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Long) {

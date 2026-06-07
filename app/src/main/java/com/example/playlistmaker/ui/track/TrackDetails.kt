@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToPhotos
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MusicVideo
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,11 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.playlistmaker.domain.Track
-import com.example.playlistmaker.ui.components.PlaylistListItem
-import com.example.playlistmaker.ui.components.ScreenHeader
+import com.example.playlistmaker.ui.navigation.ScreenHeader
+import com.example.playlistmaker.ui.playlist.PlaylistListItem
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
-import com.example.playlistmaker.ui.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.view_models.PlaylistsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,6 +121,7 @@ fun TrackDetails(
                     onClick = {
                         isFavorite = !isFavorite
                         track.favourite = isFavorite
+                        playlistsViewModel.toggleFavourite(track, isFavorite)
                     }
                 ) {
                     Icon(

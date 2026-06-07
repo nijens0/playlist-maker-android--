@@ -10,6 +10,7 @@ import com.example.playlistmaker.domain.TracksRepository
 import com.example.playlistmaker.domain.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okio.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -26,18 +27,22 @@ class TracksRepositoryImpl(
         val response = networkClient.doRequest(dto = TracksSearchRequest(expression))
         val trackTimeFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
 
-        return if (response.resultCode == 200) {
-            (response as TracksSearchResponse).results.map { trackDto ->
-                Track(
-                    id = trackDto.id,
-                    trackName = trackDto.trackName,
-                    artistName = trackDto.artistName,
-                    trackTime = trackTimeFormatter.format(trackDto.trackTimeMillis),
-                    image = trackDto.image?.replace("100x100bb.jpg", "512x512bb.jpg") ?: "",
-                    favourite = false
-                )
+        return when (response.resultCode) {
+            200 -> {
+                (response as TracksSearchResponse).results.map { trackDto ->
+                    Track(
+                        id = trackDto.id,
+                        trackName = trackDto.trackName,
+                        artistName = trackDto.artistName,
+                        trackTime = trackTimeFormatter.format(trackDto.trackTimeMillis),
+                        image = trackDto.image?.replace("100x100bb.jpg", "512x512bb.jpg") ?: "",
+                        favourite = false
+                    )
+                }
             }
-        } else emptyList()
+            -1 -> throw IOException("No internet connection")
+            else -> throw Exception("Internal server error with code: ${response.resultCode}")
+        }
     }
 
     override fun getTrackByNameAndArtist(track: Track): Flow<Track?> {
@@ -56,8 +61,8 @@ class TracksRepositoryImpl(
         playlistsDao.deleteTrackFromPlaylist(playlistId, trackId)
     }
 
-    override suspend fun updateTrackFavouriteStatus(track: Track, isFavourite: Boolean) {
-        tracksDao.insertTrack(track.copy(favourite = isFavourite).toEntity())
+    override suspend fun updateTrackFavouriteStatus(track: Track, isFavorite: Boolean) {
+        tracksDao.insertTrack(track.copy(favourite = isFavorite).toEntity())
     }
 
     override suspend fun deleteTracksByPlaylistId(playlistId: Long) {

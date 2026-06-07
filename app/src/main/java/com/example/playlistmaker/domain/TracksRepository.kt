@@ -1,6 +1,5 @@
 package com.example.playlistmaker.domain
 
-import com.example.playlistmaker.domain.Track
 import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
@@ -19,5 +18,5 @@ interface TracksRepository {
 
     suspend fun deleteTracksByPlaylistId(playlistId: Long)
 
-    suspend fun updateTrackFavouriteStatus(track: Track, isFavourite: Boolean)
+    suspend fun updateTrackFavouriteStatus(track: Track, isFavorite: Boolean)
 }
