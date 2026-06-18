@@ -1,7 +1,6 @@
 package com.example.playlistmaker.creator
 
 import android.content.Context
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.playlistmaker.data.database.AppDatabase
@@ -59,7 +58,7 @@ object Creator {
     fun getPlaylistsRepository(context: Context): PlaylistsRepository {
         if (playlistsRepository == null) {
             val database = getAppDataBase(context)
-            playlistsRepository = PlaylistsRepositoryImpl(getPlaylistsDao(database))
+            playlistsRepository = PlaylistsRepositoryImpl(context, getPlaylistsDao(database))
         }
         return playlistsRepository!!
     }

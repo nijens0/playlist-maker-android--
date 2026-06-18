@@ -1,11 +1,19 @@
 package com.example.playlistmaker.ui.playlist
 
-import androidx.compose.foundation.Image
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,33 +25,57 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.navigation.ScreenHeader
 import com.example.playlistmaker.ui.themes.AccentBlue
 import com.example.playlistmaker.ui.themes.CommonTextStyle
 import com.example.playlistmaker.ui.themes.MainTextStyle
 import com.example.playlistmaker.ui.themes.PrimaryGray
-import com.example.playlistmaker.ui.view_models.PlaylistsViewModel
+import com.example.playlistmaker.ui.view_models.NewPlaylistViewModel
 
 
 @Composable
 fun NewPlaylistScreen(
     modifier: Modifier,
     navigateBack: () -> Unit,
-    playlistsViewModel: PlaylistsViewModel
+    newPlaylistViewModel: NewPlaylistViewModel
 ) {
     var textStateOfName by remember { mutableStateOf("") }
     var textStateOfDescription by remember { mutableStateOf("") }
     var isNameFilled by remember { mutableStateOf(false) }
+
+    val coverImageUri by newPlaylistViewModel.coverImageUri.collectAsState()
+    val context = LocalContext.current
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            newPlaylistViewModel.setCoverImageUri(it.toString())
+        }
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            imagePickerLauncher.launch("image/*")
+        }
+    }
 
     Column(
         modifier
@@ -53,14 +85,40 @@ fun NewPlaylistScreen(
             onBackClick = navigateBack
         )
 
-        Image(
+        Box(
             modifier = Modifier
-                .padding(vertical = 138.dp)
-                .size(100.dp)
-                .align(Alignment.CenterHorizontally),
-            painter = painterResource(R.drawable.add_photo),
-            contentDescription = stringResource(R.string.playlist_image),
-        )
+                .padding(vertical = 20.dp)
+                .size(312.dp)
+                .align(Alignment.CenterHorizontally)
+                .clickable {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        imagePickerLauncher.launch("image/*")
+                    } else {
+                        when {
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                imagePickerLauncher.launch("image/*")
+                            }
+
+                            else -> {
+                                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            }
+                        }
+                    }
+                }
+        ) {
+            AsyncImage(
+                model = coverImageUri,
+                contentDescription = stringResource(R.string.playlist_image),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.add_photo),
+                placeholder = painterResource(R.drawable.add_photo)
+            )
+        }
+
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,7 +187,7 @@ fun NewPlaylistScreen(
                 .fillMaxWidth()
                 .height(44.dp),
             onClick = {
-                playlistsViewModel.createNewPlaylist(textStateOfName, textStateOfDescription)
+                newPlaylistViewModel.createNewPlaylist(textStateOfName, textStateOfDescription)
                 navigateBack()
             },
             content = {
@@ -144,6 +202,6 @@ fun NewPlaylistScreen(
                 containerColor = if (isNameFilled) AccentBlue else PrimaryGray
             ),
             shape = RoundedCornerShape(8.dp)
-            )
+        )
     }
 }

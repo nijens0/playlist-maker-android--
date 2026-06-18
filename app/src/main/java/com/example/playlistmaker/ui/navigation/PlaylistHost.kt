@@ -18,19 +18,21 @@ import com.example.playlistmaker.ui.playlist.NewPlaylistScreen
 import com.example.playlistmaker.ui.playlist.PlaylistScreen
 import com.example.playlistmaker.ui.playlist.PlaylistsScreen
 import com.example.playlistmaker.ui.track.TrackDetails
+import com.example.playlistmaker.ui.view_models.NewPlaylistViewModel
 import com.example.playlistmaker.ui.view_models.PlaylistViewModel
 import com.example.playlistmaker.ui.view_models.PlaylistsViewModel
 
 @Composable
 fun AppNavigation(modifier: Modifier) {
     val navController = rememberNavController()
+    val context = LocalContext.current.applicationContext
 
     val searchViewModel: SearchViewModel = viewModel(
-        factory = SearchViewModel.getViewModelFactory(LocalContext.current.applicationContext)
+        factory = SearchViewModel.getViewModelFactory(context)
     )
 
     val playlistsViewModel: PlaylistsViewModel = viewModel(
-        factory = PlaylistsViewModel.getViewModelFactory(LocalContext.current.applicationContext)
+        factory = PlaylistsViewModel.getViewModelFactory(context)
     )
 
     NavHost(
@@ -99,10 +101,16 @@ fun AppNavigation(modifier: Modifier) {
         }
 
         composable(Routes.NEW_PLAYLIST.route) {
+
+            val newPlaylistViewModel: NewPlaylistViewModel = viewModel(
+                factory = NewPlaylistViewModel.getViewModelFactory(
+                    context = context
+                )
+            )
             NewPlaylistScreen(
                 modifier = modifier,
-                playlistsViewModel = playlistsViewModel,
-                navigateBack = { navController.popBackStack() }
+                newPlaylistViewModel = newPlaylistViewModel,
+                navigateBack = { navController.popBackStack() },
             )
         }
 
