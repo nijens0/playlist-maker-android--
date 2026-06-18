@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.playlist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.ui.navigation.ScreenHeader
@@ -40,7 +40,6 @@ fun PlaylistScreen(
     navigateToTrackDetails: (Track?) -> Unit
 ) {
     val playlistState by playlistViewModel.playlistScreenState.collectAsState()
-
 
     when (playlistState) {
         is PlaylistState.Loading -> {
@@ -60,13 +59,15 @@ fun PlaylistScreen(
                     text = "",
                     onBackClick = navigateBack
                 )
-                Image(
+                AsyncImage(
                     modifier = Modifier
-                        .padding(vertical = 138.dp)
-                        .size(100.dp)
+                        .padding(vertical = 20.dp)
+                        .size(312.dp)
                         .align(Alignment.CenterHorizontally),
-                    painter = painterResource(R.drawable.add_photo),
+                    model = playlist.coverImageUri,
                     contentDescription = stringResource(R.string.playlist_image),
+                    error = painterResource(R.drawable.add_photo),
+                    placeholder = painterResource(R.drawable.add_photo)
                 )
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -99,8 +100,12 @@ fun PlaylistScreen(
                     ) {
                         items(playlist.tracks.size) { index ->
                             TrackListItem(
-                                track = tracks[index]
-                            ) { navigateToTrackDetails(tracks[index]) }
+                                track = tracks[index],
+                                onClick = { navigateToTrackDetails(tracks[index])},
+                                onLongClick = { playlistViewModel
+                                    .deleteTrackFromPlaylist(playlist.id, tracks[index])
+                                }
+                            )
                         }
                     }
                 }

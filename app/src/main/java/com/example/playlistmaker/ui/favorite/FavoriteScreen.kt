@@ -40,9 +40,12 @@ fun FavoriteScreen(
         if (!favoriteList.isEmpty()) {
             LazyColumn {
                 items(favoriteList.size) { index ->
+                    val track = favoriteList[index]
                     TrackListItem(
-                        track = favoriteList[index]
-                    ) { navigateToTrackDetails(favoriteList[index]) }
+                        track = track,
+                        onClick = { navigateToTrackDetails(track) },
+                        onLongClick = { }
+                    )
                 }
             }
         } else {

@@ -3,7 +3,6 @@ package com.example.playlistmaker.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
-import com.example.playlistmaker.domain.Playlist
 import com.example.playlistmaker.domain.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,17 +13,9 @@ data class PlaylistEntity(
     val id: Long = 0,
     val name: String,
     val description: String,
+    val coverImageUri: String,
     val tracks: List<Track> = emptyList()
-) {
-    fun toPlaylist(): Playlist {
-        return Playlist(
-            id = this.id,
-            name = this.name,
-            description = this.description,
-            tracks = this.tracks
-        )
-    }
-}
+)
 
 class Converters {
     @TypeConverter

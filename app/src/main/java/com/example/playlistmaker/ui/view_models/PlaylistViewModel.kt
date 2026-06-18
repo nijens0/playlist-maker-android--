@@ -9,11 +9,15 @@ import com.example.playlistmaker.domain.PlaylistsRepository
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.Track
+import com.example.playlistmaker.domain.TracksRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
     playlistsRepository: PlaylistsRepository,
+    private val tracksRepository: TracksRepository,
     playlistId: Long
 ) : ViewModel() {
 
@@ -31,15 +35,21 @@ class PlaylistViewModel(
             initialValue = PlaylistState.Loading
         )
 
+    fun deleteTrackFromPlaylist(playlistId: Long, track: Track) {
+        viewModelScope.launch {
+            tracksRepository.deleteTrackFromPlaylist(playlistId, track.id)
+        }
+    }
 
     companion object {
         fun getViewModelFactory(playlistId: Long, context: Context): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    val tracksRepository = Creator.getPlaylistsRepository(context)
+                    val playlistsRepository = Creator.getPlaylistsRepository(context)
+                    val tracksRepository = Creator.getTracksRepository(context)
 
-                    return PlaylistViewModel(tracksRepository, playlistId) as T
+                    return PlaylistViewModel(playlistsRepository, tracksRepository, playlistId) as T
                 }
             }
     }

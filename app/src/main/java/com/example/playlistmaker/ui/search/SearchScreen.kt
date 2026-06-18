@@ -186,8 +186,10 @@ fun SearchScreen(
                     LazyColumn {
                         items(tracks.size) { index ->
                             TrackListItem(
-                                track = tracks[index]
-                            ) { navigateToTrackDetails(tracks[index]) }
+                                track = tracks[index],
+                                onClick = { navigateToTrackDetails(tracks[index]) },
+                                onLongClick = {}
+                            )
                         }
                     }
                 }
