@@ -44,7 +44,7 @@ fun FavoriteScreen(
                     TrackListItem(
                         track = track,
                         onClick = { navigateToTrackDetails(track) },
-                        onLongClick = { }
+                        onLongClick = { playlistsViewModel.toggleFavourite(track, !track.favourite) }
                     )
                 }
             }
